@@ -1,0 +1,183 @@
+package bjs.task15;
+
+/**
+ * Created by YM on 31.10.2015.
+ * Class Computer presents a computer
+ */
+
+public class Computer {
+	/**The type of the computer. E.g. "PC", "Notebook", etc.*/
+	private String computerType;
+	/**The type of the CPU. E.g. "Intel", "ARM", etc.*/
+	private String processorType;
+
+	/**The CPU clock rate in GHz*/
+    private double processorClockRate;
+	/**Random access memory size in Gb*/
+    private double randomAccessMemorySize;
+	/**Size of the fixed memory storage in Gb. E.g. hard-drive*/
+	private double fixedMemorySize;
+
+	/**Current operation system*/
+	private OperatingSystem operatingSystem;
+
+	/**
+	 * Implements "power on" functionality.
+	 */
+	public void powerOn(){
+		setComputerType("PC");
+		setProcessorType("Intel Core i5-2400 CPU");
+		setProcessorClockRate(3.10);
+		setRandomAccessMemorySize(8.00);
+
+		System.out.println("Power is on.\n");
+    }
+
+	/**
+	 * Implements "power off" functionality
+	 */
+	public void powerOff(){
+		operatingSystem.shutDown();
+	}
+
+	/**
+	 * Installs operating system
+	 */
+	public void installOperationSystem() {
+		//Create partitions and format fixed memory
+		setFixedMemorySize(1000);
+
+		//Start installation of the operating system
+		operatingSystem = new OperatingSystem(this);
+
+		//Check system requirements
+		if (operatingSystem.checkSystemRequirements()) {
+			System.out.println("Hardware complies with the system requirements.\n");
+		}
+		else {
+			System.out.println("Hardware does not comply with the system requirements. Installation aborted.\n");
+			return;
+		}
+
+		operatingSystem.setOperationSystem("Windows 7, x64");
+		operatingSystem.setComputerName("MyComputer");
+	}
+
+	/**
+	 * Installs set of applications
+	 */
+	public void installApplications() {
+		Calculator calculator = new Calculator();
+		operatingSystem.installApplication(calculator);
+
+		FileManager fileManager = new FileManager(true);
+		operatingSystem.installApplication(fileManager);
+	}
+
+	/**
+	 * @return Calculator object
+     */
+	public Calculator getCalculator() {
+		return (Calculator)operatingSystem.getApplication("Calculator v0.1");
+	}
+
+	/**
+	 * @return FileManager object
+	 */
+	public FileManager getFileManager() {
+		return (FileManager)operatingSystem.getApplication("File Manager v0.1");
+	}
+
+    @Override
+    public String toString() {
+        //toString() method defined for all existing Java objects and can be overridden for user-defined objects
+		String result = "Computer type: " + computerType + "\n";
+        result += "Processor type: " + processorType + "\n";
+        
+		result += "Processor clock rate: " + getProcessorClockRate() + "\n";
+        result += "Random access memory size: " + getRandomAccessMemorySize()  + "\n";
+		result += "Fixed memory size: " + getFixedMemorySize() + "\n\n";
+
+		result += operatingSystem.toString();
+
+        return result;
+    }
+
+	/**
+	 * Sets computer type
+	 * @param computerType The type of the computer.
+     */
+	public void setComputerType(String computerType) {
+		this.computerType = computerType;
+	}
+
+	/**
+	 * Sets processor type
+	 * @param processorType Type of the processor
+     */
+	public void setProcessorType(String processorType) {
+		this.processorType = processorType;
+	}
+
+	/**
+	 * Sets clock rate
+	 * @param processorClockRate Current clock rate in GHz
+     */
+	public void setProcessorClockRate(double processorClockRate) {
+		if (processorClockRate > 0) {
+			this.processorClockRate = processorClockRate;
+		}
+	}
+
+	/**
+	 * Set ramdom access memory size.
+	 * @param randomAccessMemorySize Size of the random access memory in Gb
+     */
+	public void setRandomAccessMemorySize(double randomAccessMemorySize) {
+		if (randomAccessMemorySize > 0)
+			this.randomAccessMemorySize = randomAccessMemorySize;
+	}
+
+	/**
+	 * Sets fixed memory size
+	 * @param fixedMemorySize Fixed memory size in Gb
+     */
+	public void setFixedMemorySize(double fixedMemorySize) {
+		this.fixedMemorySize = fixedMemorySize;
+	}
+
+	/**
+	 * @return Computer type
+     */
+	public String getComputerType() {
+		return computerType;
+	}
+
+	/**
+	 * @return Processor type
+	 */
+	public String getProcessorType() {
+		return processorType;
+	}
+
+	/**
+	 * @return Processor clock rate
+	 */
+	public double getProcessorClockRate() {
+		return processorClockRate;
+	}
+
+	/**
+	 * @return Random access memory size in Gb
+	 */
+	public double getRandomAccessMemorySize() {
+		return randomAccessMemorySize;
+	}
+
+	/**
+	 * @return Fixed memory size in Gb
+	 */
+	public double getFixedMemorySize() {
+		return fixedMemorySize;
+	}
+}
