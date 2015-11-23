@@ -37,30 +37,36 @@ public class Computer {
 	 * Implements "power off" functionality
 	 */
 	public void powerOff(){
-		operatingSystem.shutDown();
+		if (operatingSystem != null)
+			operatingSystem.shutDown();
+
+		operatingSystem = null;
+		System.out.println("Computer power is off.");
 	}
 
 	/**
 	 * Installs operating system
 	 */
-	public void installOperationSystem() {
+	public void installOperationSystem(String operatingSystem) {
 		//Create partitions and format fixed memory
 		setFixedMemorySize(1000);
 
 		//Start installation of the operating system
-		operatingSystem = new OperatingSystem(this);
+		this.operatingSystem = new OperatingSystem(this);
 
 		//Check system requirements
-		if (operatingSystem.checkSystemRequirements()) {
-			System.out.println("Hardware complies with the system requirements.\n");
+		if (this.operatingSystem.checkSystemRequirements()) {
+			System.out.println("Hardware complies with the system requirements.");
 		}
 		else {
-			System.out.println("Hardware does not comply with the system requirements. Installation aborted.\n");
+			System.out.println("Hardware does not comply with the system requirements. Installation aborted.");
 			return;
 		}
 
-		operatingSystem.setOperationSystem("Windows 7, x64");
-		operatingSystem.setComputerName("MyComputer");
+		this.operatingSystem.setOperationSystem(operatingSystem);
+		this.operatingSystem.setComputerName("MyComputer");
+
+		System.out.println("Operating system " + this.operatingSystem.getOperationSystem() + " successfully installed.\n");
 	}
 
 	/**
@@ -72,6 +78,8 @@ public class Computer {
 
 		FileManager fileManager = new FileManager(true);
 		operatingSystem.installApplication(fileManager);
+
+		System.out.print(operatingSystem.toString());
 	}
 
 	/**
@@ -97,8 +105,6 @@ public class Computer {
 		result += "Processor clock rate: " + getProcessorClockRate() + "\n";
         result += "Random access memory size: " + getRandomAccessMemorySize()  + "\n";
 		result += "Fixed memory size: " + getFixedMemorySize() + "\n\n";
-
-		result += operatingSystem.toString();
 
         return result;
     }

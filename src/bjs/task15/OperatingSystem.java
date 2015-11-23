@@ -16,7 +16,7 @@ public class OperatingSystem {
     private Computer computer;
 
     /**Stores all installed applications*/
-    private HashMap<String, Application> installedApplications;
+    Application[] installedApplications;
 
     /**
      * Sets reference to the current computer
@@ -24,7 +24,6 @@ public class OperatingSystem {
      */
     OperatingSystem (Computer computer) {
         this.computer = computer;
-        installedApplications = new HashMap<String, Application>();
     }
 
     /**
@@ -57,8 +56,24 @@ public class OperatingSystem {
      * @return Number of the application installed
      */
     public int installApplication(Application application) {
-        installedApplications.put(application.getApplicationId(), application);
-        return installedApplications.size();
+        int applicationNum = 1;
+
+        if (installedApplications == null) {
+            installedApplications = new Application[applicationNum];
+        }
+        else {
+            applicationNum = installedApplications.length + 1;
+        }
+
+        //This is the code from the java.util.Arrays.copyOf()
+        Application[] copyArray = new Application[applicationNum];
+        System.arraycopy(installedApplications, 0, copyArray, 0,
+                Math.min(installedApplications.length, applicationNum));
+
+        copyArray[applicationNum - 1] = application;
+        installedApplications = copyArray;
+
+        return installedApplications.length;
     }
 
     /**
@@ -67,7 +82,15 @@ public class OperatingSystem {
      * @return Returns installed application
      */
     public Application getApplication(String applicationId) {
-        return installedApplications.get(applicationId);
+        if (installedApplications != null) {
+            for (Application application : installedApplications) {
+                if (applicationId.equals(application.getApplicationId())) {
+                    return application;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -76,7 +99,7 @@ public class OperatingSystem {
     public void shutDown() {
         System.out.println("Operating system " + operationSystem + " is shut down.");
 
-        installedApplications.clear();
+        installedApplications = null;
         computer = null;
         computerName = null;
         operationSystem = null;
@@ -94,8 +117,10 @@ public class OperatingSystem {
 
         result += "Installed applications: \n";
 
-        for (String applicationId: installedApplications.keySet()) {
-            result += "\t" + applicationId + "\n";
+        if (installedApplications != null) {
+            for (Application application : installedApplications) {
+                result += "\t" + application.getApplicationId() + "\n";
+            }
         }
 
         result += "\n";

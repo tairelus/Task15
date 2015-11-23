@@ -117,10 +117,13 @@ public class Calculator extends Application{
             matcher = pattern.matcher(expression);
 
             double leftOperand = 0;
-            if (matcher.find())
+            if (matcher.find()) {
                 leftOperand = Double.parseDouble(matcher.group());
-            else
-                System.out.println("Operands not found");
+            }
+            else {
+                System.out.println("Operands not found\n");
+                return;
+            }
 
             switch (operation) {
                 case "+":
@@ -149,14 +152,14 @@ public class Calculator extends Application{
                     break;
                 default:
                     resultValue = 0;
-                    System.out.println("Unknown operation found");
+                    System.out.println("Unknown operation found\n");
                     break;
             }
 
-            System.out.println("Expression result: " + resultValue);
+            System.out.println("Expression result: " + resultValue + "\n");
         }
         else
-            System.out.println("String is not expression with single +-*/");
+            System.out.println("String is not expression with single +-*/\n");
     }
 
     void setUnary(double leftOperand) {
